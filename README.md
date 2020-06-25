@@ -1,4 +1,4 @@
-# Picterm: preview image in terminal window
+# Picterm: preview images in terminal window
 
 ![CI](https://github.com/artemsen/picterm/workflows/CI/badge.svg)
 
@@ -9,4 +9,5 @@ new window.
 ## Supported image formats
 
 - JPEG (via libjpeg);
-- PNG (via libpng).
+- PNG (via libpng);
+- GIF (via libgif, without animation).

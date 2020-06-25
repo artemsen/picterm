@@ -2,45 +2,12 @@
 // Copyright (C) 2020 Artem Senichev <artemsen@gmail.com>
 
 #include "viewer.hpp"
+#include "image_ldr.hpp"
 
 #include <cstdio>
 #include <cstdlib>
 #include <exception>
 #include <getopt.h>
-
-/**
- * @brief Print title.
- */
-static void print_title()
-{
-    puts("Picterm - preview image in terminal window.");
-}
-
-/**
- * @brief Print version info.
- */
-static void print_version()
-{
-    print_title();
-    puts("Version " VERSION ".");
-    puts("Image format support:");
-
-    puts("  PNG (libpng):  "
-#ifdef HAVE_LIBPNG
-         "YES"
-#else
-         "NO"
-#endif // HAVE_LIBPNG
-    );
-
-    puts("  JPG (libjpeg): "
-#ifdef HAVE_LIBJPEG
-         "YES"
-#else
-         "NO"
-#endif // HAVE_LIBJPEG
-    );
-}
 
 /**
  * @brief Print help usage info.
@@ -49,14 +16,25 @@ static void print_version()
  */
 static void print_help(const char* app)
 {
-    print_title();
+    puts("Picterm - preview images in terminal window.");
     printf("Usage: %s [OPTION...] FILE\n", app);
     puts("Default values are specified in brackets.");
     puts("  -b, --border=N         Window border size in pixels [0]");
     puts("  -s, --scale=PERCENT    Set initiial image scale [0:auto]");
     puts("  -e, --exit-unfocus     Exit if window lost focus [off]");
-    puts("  -v, --version          Print version and exit");
+    puts("  -v, --version          Print version info and supported formats list");
     puts("  -h, --help             Print this help and exit");
+}
+
+/**
+ * @brief Print version info.
+ */
+static void print_version()
+{
+    puts("Picterm ver." VERSION ".");
+    puts("Project page: https://github.com/artemsen/picterm");
+    puts("Image format support:");
+    print_formats();
 }
 
 /** @brief Application entry point. */

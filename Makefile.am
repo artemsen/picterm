@@ -6,6 +6,8 @@ picterm_SOURCES = \
 	src/viewer.cpp \
 	src/image.hpp \
 	src/image.cpp \
+	src/image_ldr.hpp \
+	src/image_ldr.cpp \
 	src/x11.hpp \
 	src/x11.cpp
 

@@ -2,6 +2,7 @@
 // Copyright (C) 2020 Artem Senichev <artemsen@gmail.com>
 
 #include "viewer.hpp"
+#include "image_ldr.hpp"
 #include "x11.hpp"
 
 /** @brief Minimum scale (1%). */
@@ -15,7 +16,7 @@ constexpr size_t move_step = 10;
 
 void viewer::show(const char* file)
 {
-    img_ = image(file);
+    img_ = load_image(file);
     wnd_.create(border);
 
     if (!scale) {

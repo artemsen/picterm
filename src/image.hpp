@@ -15,18 +15,6 @@ class image
   public:
     using rgba_t = uint32_t;
 
-    image() = default;
-
-    /**
-     * @brief Constructor.
-     *
-     * @param[in] file path to the file to load
-     *
-     * @throw std::system_error if file operation fails
-     * @throw std::runtime_error on format error
-     */
-    image(const char* file);
-
     /**
      * @brief Resize image.
      *
