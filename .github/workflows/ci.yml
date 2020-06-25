@@ -13,6 +13,8 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
+    - name: install autoconf-archive
+      run: sudo apt install --no-install-recommends --yes autoconf-archive
     - name: autoreconf
       run: autoreconf -i
     - name: configure
