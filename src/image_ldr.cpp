@@ -307,7 +307,11 @@ image load_image(const char* file)
 
     loader::file_header_t header;
     if (fread(header.data(), 1, header.size(), fd.get()) != header.size()) {
-        throw std::system_error(errno, std::system_category());
+        if (errno) {
+            throw std::system_error(errno, std::system_category());
+        } else {
+            throw std::runtime_error("Invalid image file");
+        }
     }
     rewind(fd.get());
 
