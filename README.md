@@ -11,3 +11,11 @@ new window.
 - JPEG (via libjpeg);
 - PNG (via libpng);
 - GIF (via libgif, without animation).
+
+## Key bindings
+- `Arrows` and vim-like moving keys (`hjkl`): Move view point;
+- `+`, `=`: Zoom in;
+- `-`: Zoom out;
+- `Backspace`: Set optimal scale: 100% or fit to window;
+- `1`, `2`, ..., `0`: Set scale to 10%, 20%, ..., 100%;
+- `Esc`, `Enter`, `F10`, `q`, `e`, `x`: Exit the program.

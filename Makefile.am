@@ -11,6 +11,9 @@ picterm_SOURCES = \
 	src/x11.hpp \
 	src/x11.cpp
 
+man_MANS = picterm.1
+
 EXTRA_DIST = \
 	LICENSE \
-	README.md
+	README.md \
+	$(man_MANS)

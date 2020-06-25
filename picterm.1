@@ -1,0 +1,51 @@
+.TH picterm 1 "June 2020" "picterm" "User Commands"
+.SH NAME
+picterm \- preview images in terminal window 
+.SH SYNOPSIS
+picterm [\fIOPTIONS\fR...] \fIFILE\fR
+.SH DESCRIPTION
+Creates a new X11 window as a child of the currently focused one (e.g. terminal
+window), loads the image from the specified \fIfile\fR, and draws the image
+inside the new window.
+.
+.SH OPTIONS
+.PP
+.IP "\fB\-h\fR, \fB\-\-help\fR"
+Display help message.
+.IP "\fB\-v\fR, \fB\-\-version\fR"
+Display version information and list of supported images.
+.IP "\fB\-v\fR, \fB\-\-version\fR"
+Display version information and list of supported images.
+.IP "\fB\-e\fR, \fB\-\-exit\-unfocus\fR"
+Exit program if the window has lost input focus.
+.IP "\fB\-s\fR, \fB\-\-scale\fR\fB=\fR\fIPERCENT\fR"
+Set initial scale of the image. The default value is \fB0\fR (auto): if the
+image is greater than the windows, it will be zoomed out to fit the window.
+.IP "\fB\-b\fR, \fB\-\-border\fR\fB=\fR\fIPIXELS\fR"
+Set border size \- space between parent window and the window with an image.
+.
+.SH KEYBINDINGS
+.IP "\fBArrows\fR and vim-like moving keys (\fBhjkl\fR)"
+Move view point.
+.IP "\fB+\fP, \fB=\fR"
+Zoom in.
+.IP "\fB-\fP"
+Zoom out.
+.IP "\fBBackspace\fP"
+Set optimal scale: 100% or fit to window.
+.IP "\fB1\fP, \fB2\fP, ..., \fB9\fP, \fB0\fP"
+Set scale to 10%, 20%, ..., 100%.
+.IP "\fBEsc\fP, \fBEnter\fP, \fBF10\fP, \fBq\fP, \fBe\fP, \fBx\fP"
+Exit the program.
+.
+.SH ENVIRONMENT
+.PP
+.IP \fIWINDOWID\fR
+Parent window ID for the image's window. If not specified, currently focused
+window will be used as parent.
+.
+.SH NOTES
+For suggestions, comments, bug reports etc. visit https://github.com/artemsen/picterm
+.SH AUTHOR
+Artem Senichev <artemsen@gmail.com>
+.
