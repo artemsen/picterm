@@ -86,16 +86,16 @@ int main(int argc, char* argv[])
         return EXIT_FAILURE;
     }
 
-    const char* file_name = argv[optind];
-    if (!*file_name) {
+    view.file_name = argv[optind];
+    if (!*view.file_name) {
         fprintf(stderr, "File name can not be empty\n");
         return EXIT_FAILURE;
     }
 
     try {
-        view.show(file_name);
+        view.show();
     } catch (std::exception& ex) {
-        fprintf(stderr, "Unable to preview file %s: %s\n", file_name, ex.what());
+        fprintf(stderr, "Unable to preview file %s: %s\n", view.file_name, ex.what());
         return EXIT_FAILURE;
     }
 

@@ -17,11 +17,9 @@ public:
     /**
      * @brief Show image.
      *
-     * @param[in] file path to th eimage file
-     *
      * @throw std::exception in case of errors
      */
-    void show(const char* file);
+    void show();
 
 private:
     /**
@@ -80,6 +78,8 @@ private:
     bool on_keypress(KeySym key);
 
 public:
+    /** @brief Path to the file to show. */
+    const char* file_name = nullptr;
     /** @brief Current image scale. */
     size_t scale = 0;
     /** @brief Window border size. */

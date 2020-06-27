@@ -6,8 +6,13 @@
 #include <cstring>
 #include <stdexcept>
 
+#include <X11/Xatom.h>
+
 x11::~x11()
 {
+    if (!parent_title_.empty()) {
+        set_title(parent_title_.c_str());
+    }
     if (gc_) {
         XFreeGC(display_, gc_);
     }
@@ -31,26 +36,39 @@ void x11::create(size_t border)
     }
 
     // get currently focused window to use it as parent
-    Window parent = 0;
     const char* windowId = getenv("WINDOWID");
     if (windowId && *windowId) {
-        parent = atoi(windowId);
+        parent_ = atoi(windowId);
     } else {
         int revert;
-        XGetInputFocus(display_, &parent, &revert);
+        XGetInputFocus(display_, &parent_, &revert);
     }
-    if (!parent) {
+    if (!parent_) {
         throw std::runtime_error("Parent window not found, try to set WINDOWID");
     }
 
+    // save current parent's title to restore them on exit
+    XTextProperty prop;
+    XGetWMName(display_, parent_, &prop);
+    if (prop.nitems > 0) {
+        int count = 0;
+        char** list = nullptr;
+        Xutf8TextPropertyToTextList(display_, &prop, &list, &count);
+        if (count) {
+            parent_title_ = list[0];
+            XFreeStringList(list);
+            XFree(prop.value);
+        }
+    }
+
     XWindowAttributes attr;
-    XGetWindowAttributes(display_, parent, &attr);
+    XGetWindowAttributes(display_, parent_, &attr);
     width_ = attr.width - border * 2;
     height_ = attr.height - border * 2;
     depth_ = attr.depth;
 
     // create overlay window
-    wnd_ = XCreateSimpleWindow(display_, parent, border, border, width_, height_, 0, 0, 0);
+    wnd_ = XCreateSimpleWindow(display_, parent_, border, border, width_, height_, 0, 0, 0);
 
     const int screen = DefaultScreen(display_);
     gc_ = XCreateGC(display_, wnd_, 0, nullptr);
@@ -59,6 +77,16 @@ void x11::create(size_t border)
 
     XMapWindow(display_, wnd_);
     XSetInputFocus(display_, wnd_, RevertToParent, CurrentTime);
+}
+
+void x11::set_title(const char* title) const
+{
+    char* text = const_cast<char*>(title);
+    unsigned char* prop = reinterpret_cast<unsigned char*>(text);
+    XChangeProperty(display_, parent_,
+        XInternAtom(display_, "_NET_WM_NAME", False),
+        XInternAtom(display_, "STRING", False), 8,
+        PropModeReplace, prop, strlen(title));
 }
 
 void x11::set_image(const image& img, ssize_t x, ssize_t y)
@@ -105,7 +133,7 @@ void x11::move_image(ssize_t x, ssize_t y)
     redraw();
 }
 
-void x11::run(key_handler_fn cb, bool exit_unfocus)
+void x11::run(key_handler_fn cb, bool exit_unfocus) const
 {
     XPutImage(display_, wnd_, gc_, image_, 0, 0, img_x_, img_y_, image_->width, image_->height);
 

@@ -5,6 +5,7 @@
 
 #include "image.hpp"
 
+#include <string>
 #include <functional>
 
 #include <X11/Xlib.h>
@@ -37,6 +38,13 @@ public:
     void create(size_t border);
 
     /**
+     * @brief Set window title.
+     *
+     * @param[in] title new parent's window title
+     */
+    void set_title(const char* title) const;
+
+    /**
      * @brief Set new image for drawing.
      *
      * @param[in] img image to load
@@ -59,7 +67,7 @@ public:
      * @param[in] cb callback for key press events
      * @param[in] exit_unfocus exit loop if the window has lost input focus
      */
-    void run(key_handler_fn cb, bool exit_unfocus);
+    void run(key_handler_fn cb, bool exit_unfocus) const;
 
     /** @brief Get width of the window. */
     inline size_t width() const { return width_; }
@@ -84,8 +92,10 @@ private:
 private:
     /** @brief X11 display. */
     Display* display_ = nullptr;
-    /** @brief X11 window. */
+    /** @brief Our X11 window. */
     Window wnd_ = 0;
+    /** @brief Parent X11 window. */
+    Window parent_ = 0;
     /** @brief X11 graphics context. */
     GC gc_ = 0;
     /** @brief Width of the window. */
@@ -101,4 +111,7 @@ private:
     ssize_t img_x_ = 0;
     /** @brief Y coordinate of image on window (top-left corner). */
     ssize_t img_y_ = 0;
+
+    /** @brief Original title of parent window. */
+    std::string parent_title_;
 };

@@ -14,9 +14,9 @@ constexpr size_t scale_step = 5;
 /** @brief Move step used on positioning. */
 constexpr size_t move_step = 10;
 
-void viewer::show(const char* file)
+void viewer::show()
 {
-    img_ = load_image(file);
+    img_ = load_image(file_name);
     wnd_.create(border);
 
     if (!scale) {
@@ -74,6 +74,16 @@ void viewer::refresh()
     }
 
     wnd_.set_image(img, img_x, img_y);
+
+    std::string title = file_name;
+    title += " [";
+    title += std::to_string(img_.width);
+    title += 'x';
+    title += std::to_string(img_.height);
+    title += ' ';
+    title += std::to_string(scale);
+    title += "%]";
+    wnd_.set_title(title.c_str());
 }
 
 bool viewer::calc_scale(scale_op op)
