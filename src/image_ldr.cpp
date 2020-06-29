@@ -91,13 +91,13 @@ static image jpg_load(FILE* file)
             // not the most optimal way, but...
             switch (jpg->num_components) {
                 case 1:
-                    *pixel = 0xff000000 | buffer[i] | buffer[i] << 8 | buffer[i] << 16;
+                    *pixel = 0xff000000 | buffer[i] << 16 | buffer[i] << 8 | buffer[i];
                     break;
                 case 3:
-                    *pixel = 0xff000000 | buffer[i + 2] | buffer[i + 1] << 8 | buffer[i] << 16;
+                    *pixel = 0xff000000 | buffer[i] << 16 | buffer[i + 1] << 8 | buffer[i + 2];
                     break;
                 case 4:
-                    *pixel = buffer[i + 3] << 24 | buffer[i + 2] | buffer[i + 1] << 8 | buffer[i] << 16;
+                    *pixel = buffer[i + 3] << 24 | buffer[i] << 16 | buffer[i + 1] << 8 | buffer[i + 2];
                     break;
                 default:
                     throw std::runtime_error(std::to_string(jpg->num_components) + " components not supported yet");
@@ -259,9 +259,7 @@ static image gif_load(FILE* file)
         const uint8_t* raster = &gif->SavedImages->RasterBits[y * img.width];
         for (int x = 0; x < frame_w; ++x) {
             const uint8_t& color = raster[x];
-            if (color == gif->SBackGroundColor) {
-                *pixel = 0;
-            } else {
+            if (color != gif->SBackGroundColor) {
                 const GifColorType& rgb = clr_map[color];
                 *pixel = 0xff000000 | rgb.Red << 16 | rgb.Green << 8 | rgb.Blue;
             }
