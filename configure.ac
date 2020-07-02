@@ -1,4 +1,4 @@
-AC_INIT([picterm], [1.0], [https://github.com/artemsen/picterm])
+AC_INIT([picterm], [1.1], [https://github.com/artemsen/picterm])
 AC_LANG([C++])
 AM_SILENT_RULES([yes])
 AM_INIT_AUTOMAKE([subdir-objects foreign -Wall])
