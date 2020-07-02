@@ -85,8 +85,7 @@ void x11::set_title(const char* title) const
     unsigned char* prop = reinterpret_cast<unsigned char*>(text);
     XChangeProperty(display_, parent_,
         XInternAtom(display_, "_NET_WM_NAME", False),
-        XInternAtom(display_, "STRING", False), 8,
-        PropModeReplace, prop, strlen(title));
+        XA_STRING, 8, PropModeReplace, prop, strlen(title));
 }
 
 void x11::set_image(const image& img, ssize_t x, ssize_t y)
