@@ -62,11 +62,7 @@ void x11::create(size_t border)
         }
     }
 
-    XWindowAttributes attr;
-    XGetWindowAttributes(display_, parent_, &attr);
-    width_ = attr.width - border * 2;
-    height_ = attr.height - border * 2;
-    depth_ = attr.depth;
+    updateWindowAttributes(border);
 
     int colorbg = getXresourceColor("picterm.background");
     if (colorbg == -1) {
@@ -156,6 +152,15 @@ void x11::run(key_handler_fn cb, bool exit_unfocus) const
             break;
         }
     }
+}
+
+void x11::updateWindowAttributes(size_t border)
+{
+    XWindowAttributes attr;
+    XGetWindowAttributes(display_, parent_, &attr);
+    width_ = attr.width - border * 2;
+    height_ = attr.height - border * 2;
+    depth_ = attr.depth;
 }
 
 void x11::redraw() const

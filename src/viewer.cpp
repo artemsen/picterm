@@ -41,6 +41,7 @@ void viewer::refresh()
     }
 
     // recalculate position of image on window
+    wnd_.updateWindowAttributes(border);
     ssize_t img_x;
     ssize_t img_y;
     const size_t wnd_w = wnd_.width();
@@ -112,6 +113,7 @@ bool viewer::calc_scale(scale_op op)
 
     case scale_op::optimal:
         // 100% or less to fit the window
+        wnd_.updateWindowAttributes(border);
         scale = 100;
         if (wnd_.width() < img_.width) {
             scale = 100 * (1.0f / (static_cast<float>(img_.width) / wnd_.width()));
@@ -145,6 +147,7 @@ void viewer::change_scale(size_t sc)
 
 void viewer::change_position(move_op mv)
 {
+    wnd_.updateWindowAttributes(border);
     const size_t wnd_w = wnd_.width();
     const size_t wnd_h = wnd_.height();
     const size_t img_w = wnd_.img_w();
