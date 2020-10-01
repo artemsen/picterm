@@ -7,6 +7,7 @@
 #include <stdexcept>
 
 #include <X11/Xatom.h>
+#include <X11/Xresource.h>
 
 x11::~x11()
 {
@@ -67,8 +68,12 @@ void x11::create(size_t border)
     height_ = attr.height - border * 2;
     depth_ = attr.depth;
 
+    int colorbg = getXresourceColor("picterm.background");
+    if (colorbg == -1) {
+        colorbg = 0;
+    }
     // create overlay window
-    wnd_ = XCreateSimpleWindow(display_, parent_, border, border, width_, height_, 0, 0, 0);
+    wnd_ = XCreateSimpleWindow(display_, parent_, border, border, width_, height_, 0, 0, colorbg);
 
     const int screen = DefaultScreen(display_);
     gc_ = XCreateGC(display_, wnd_, 0, nullptr);
@@ -160,4 +165,26 @@ void x11::redraw() const
     expose.type = Expose;
     expose.xexpose.window = wnd_;
     XSendEvent(display_, wnd_, False, ExposureMask, &expose);
+}
+
+int x11::getXresourceColor(const char* color) const
+{
+    XrmInitialize();
+    char* resource_manager = XResourceManagerString(display_);
+    if (!resource_manager) {
+        return -1;
+    }
+
+    XrmDatabase db = XrmGetStringDatabase(resource_manager);
+    if (!db) {
+        return -1;
+    }
+
+    XrmValue value;
+    char *type;
+    if (XrmGetResource(db, color, "", &type, &value)) {
+        return strtol(value.addr + 1, NULL, 16); // first char is '#'
+    } else {
+        return -1;
+    }
 }
