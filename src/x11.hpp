@@ -88,6 +88,7 @@ private:
      * @brief Send expose event to redraw the window.
      */
     void redraw() const;
+    int getXresourceColor(const char* color) const;
 
 private:
     /** @brief X11 display. */

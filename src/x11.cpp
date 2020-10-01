@@ -9,28 +9,6 @@
 #include <X11/Xatom.h>
 #include <X11/Xresource.h>
 
-int getXresourceColor(const char* color, Display* display_)
-{
-    XrmInitialize();
-    char* resource_manager = XResourceManagerString(display_);
-    if (!resource_manager) {
-        return -1;
-    }
-
-    XrmDatabase db = XrmGetStringDatabase(resource_manager);
-    if (!db) {
-        return -1;
-    }
-
-    XrmValue value;
-    char *type;
-    if (XrmGetResource(db, color, "", &type, &value)) {
-        return strtol(value.addr + 1, NULL, 16); // first char is '#'
-    } else {
-        return -1;
-    }
-}
-
 x11::~x11()
 {
     if (!parent_title_.empty()) {
@@ -90,7 +68,7 @@ void x11::create(size_t border)
     height_ = attr.height - border * 2;
     depth_ = attr.depth;
 
-    int colorbg = getXresourceColor("picterm.background", display_);
+    int colorbg = getXresourceColor("picterm.background");
     if (colorbg == -1) {
         colorbg = 0;
     }
@@ -187,4 +165,26 @@ void x11::redraw() const
     expose.type = Expose;
     expose.xexpose.window = wnd_;
     XSendEvent(display_, wnd_, False, ExposureMask, &expose);
+}
+
+int x11::getXresourceColor(const char* color) const
+{
+    XrmInitialize();
+    char* resource_manager = XResourceManagerString(display_);
+    if (!resource_manager) {
+        return -1;
+    }
+
+    XrmDatabase db = XrmGetStringDatabase(resource_manager);
+    if (!db) {
+        return -1;
+    }
+
+    XrmValue value;
+    char *type;
+    if (XrmGetResource(db, color, "", &type, &value)) {
+        return strtol(value.addr + 1, NULL, 16); // first char is '#'
+    } else {
+        return -1;
+    }
 }
