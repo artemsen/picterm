@@ -69,6 +69,8 @@ public:
      */
     void run(key_handler_fn cb, bool exit_unfocus) const;
 
+    void updateWindowAttributes(size_t border);
+
     /** @brief Get width of the window. */
     inline size_t width() const { return width_; }
     /** @brief Get height of the window. */
